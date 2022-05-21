@@ -1,8 +1,19 @@
-
+const database=require('../../services/mySql/app');
 
 module.exports.MonitoriasController = {
     getAll: async (req, res) => {
+        
         try {
+            const conecction=database();
+            
+            conecction.query(
+                'SELECT * FROM `monitores`',
+                function(err, results, fields) {
+                  console.log(results); // results contains rows returned by server
+                  
+                }
+              )
+
             res.send('Estas obteniendo todas los monitorias')
         } catch (error) {
 
