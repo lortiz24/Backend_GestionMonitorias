@@ -1,7 +1,6 @@
-const express = require('express')
-const bodyParser = require('body-parser');
-const monitores =require('./components/monitores/routes')
+import {express } from 'express'
 const {Routers} =require('./routes')
+require('dotenv').config()
 const cors=require('cors')
 const app = express();
 
@@ -13,8 +12,8 @@ Routers(app);
 
 
 
-app.listen(3000,()=>{
-    console.log(`Server listening on port ${3000}`)
+app.listen(process.env.PORT,()=>{
+    console.log(`Server listening on port ${process.env.PORT}`)
 });
 
 

@@ -2,7 +2,7 @@ const mysql = require('mysql2');
 const myConnection = require('express-myconnection');
 require('dotenv').config();
 
-module.exports = ()=>{
+Database=()=>{
     
     return mysql.createConnection({
         host: 'localhost',
@@ -13,4 +13,6 @@ module.exports = ()=>{
     
     
 };
+
+export default Database;
 

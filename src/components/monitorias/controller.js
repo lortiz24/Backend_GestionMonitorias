@@ -1,5 +1,6 @@
-const database = require('../../services/mySql/app');
+import {database} from '../../services/mySql/app';
 const COLLECTION = 'monitorias'
+//import {MonitoriasServices} from './services'
 module.exports.MonitoriasController = {
     getAll: (req, res) => {
         try {
@@ -24,7 +25,7 @@ module.exports.MonitoriasController = {
             console.log(id)
             const conecction = database();
             conecction.query(
-                `SELECT * FROM ${COLLECTION} WHERE idMonitorias =?`,id,
+                `SELECT * FROM ${COLLECTION} WHERE idMonitorias =?`, id,
                 function (err, results, fields) {
                     results.length !== 0 ? res.send({
                         mensaje: "Consulta terminada satisfactoriamente", body: results
@@ -74,27 +75,24 @@ module.exports.MonitoriasController = {
                     res.send({ mensaje: 'No se puedo actualizar valores nulos' })
                 }
             }
-            
-
-            let send=[
+            let send = [
                 body,
                 id
             ]
-console.log(send)
             let query = `UPDATE ${COLLECTION} SET ? WHERE idMonitorias = ?`;
             const conecction = database();
-            conecction.query(query,send,
+            conecction.query(query, send,
                 function (err, results) {
                     if (err) {
                         //Error en el ingreso de datos en la tabla
                         res.send({ mensaje: err.sqlMessage })
-                    } else{
-                        res.send({message: 'Fue actualizado con exito'})
+                    } else {
+                        res.send({ message: 'Fue actualizado con exito' })
 
                     }
 
                 }
-            );  
+            );
 
         } catch (error) {
 
