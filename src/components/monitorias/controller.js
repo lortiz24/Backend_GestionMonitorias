@@ -1,19 +1,10 @@
-import {database} from '../../services/mySql/app';
-const COLLECTION = 'monitorias'
-//import {MonitoriasServices} from './services'
+const {MonitoriasServices}=require('./services')
 module.exports.MonitoriasController = {
     getAll: (req, res) => {
         try {
-            const conecction = database();
-            conecction.query(
-                `SELECT * FROM ${COLLECTION}`,
-                function (err, results, fields) {
-                    res.send({
-                        mensaje: "Consulta terminada satisfactoriamente",
-                        body: results
-                    })
-                }
-            );
+            const response=MonitoriasServices.getAll();
+            console.log(response)
+            res.json({response})
         } catch (error) {
             console.log(error)
             res.send(error)

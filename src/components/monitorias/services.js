@@ -11,6 +11,6 @@ const getAll = () => {
     );
 };
 
-export default MonitoriasServices={
+module.exports.MonitoriasServices={
     getAll,
 }
