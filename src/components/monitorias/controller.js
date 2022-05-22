@@ -1,13 +1,28 @@
-const {MonitoriasServices}=require('./services')
+const database = require('../../services/mySql/app');
+const COLLECTION = 'monitorias'
+
 module.exports.MonitoriasController = {
     getAll: (req, res) => {
         try {
-            const response=MonitoriasServices.getAll();
-            console.log(response)
-            res.json({response})
+            const conecction = database();
+            conecction.connect(err => {
+                if (err) {
+                    throw err
+                }else{
+                    console.log('Connected to database')
+                }
+            });
+            conecction.query(
+                `SELECT * FROM ${COLLECTION}`,
+                function (err, results, fields) {
+                    res.json({
+                        mensaje: "Consulta terminada satisfactoriamente", body: results
+                    })
+                }
+            );
         } catch (error) {
             console.log(error)
-            res.send(error)
+            res.json(error)
         }
     },
     getById: (req, res) => {
@@ -18,9 +33,9 @@ module.exports.MonitoriasController = {
             conecction.query(
                 `SELECT * FROM ${COLLECTION} WHERE idMonitorias =?`, id,
                 function (err, results, fields) {
-                    results.length !== 0 ? res.send({
+                    results.length !== 0 ? res.json({
                         mensaje: "Consulta terminada satisfactoriamente", body: results
-                    }) : res.send({
+                    }) : res.json({
                         mensaje: `No se encontraron resultados con id=${id}`, body: results
                     })
 
@@ -36,7 +51,7 @@ module.exports.MonitoriasController = {
             const { body } = req
             for (const property in body) {
                 if (body[property] === null || body[property] === undefined || body[property].length === 0) {
-                    res.send({ mensaje: 'No se puede guardar valores nulos' })
+                    res.json({ mensaje: 'No se puede guardar valores nulos' })
                 }
             }
             const conecction = database();
@@ -45,10 +60,10 @@ module.exports.MonitoriasController = {
                 function (err, results) {
                     if (err) {
                         //Error en el ingreso de datos en la tabla
-                        res.send({ mensaje: err.sqlMessage })
+                        res.json({ mensaje: err.sqlMessage })
                     } {
                         console.log("1 record inserted");
-                        res.send({ mensaje: "Succesful" })
+                        res.json({ mensaje: "Succesful" })
                     }
 
                 }
@@ -63,7 +78,7 @@ module.exports.MonitoriasController = {
             const { params: { id } } = req;
             for (const property in body) {
                 if (body[property] === null || body[property] === undefined || body[property].length === 0) {
-                    res.send({ mensaje: 'No se puedo actualizar valores nulos' })
+                    res.json({ mensaje: 'No se puedo actualizar valores nulos' })
                 }
             }
             let send = [
@@ -76,9 +91,9 @@ module.exports.MonitoriasController = {
                 function (err, results) {
                     if (err) {
                         //Error en el ingreso de datos en la tabla
-                        res.send({ mensaje: err.sqlMessage })
+                        res.json({ mensaje: err.sqlMessage })
                     } else {
-                        res.send({ message: 'Fue actualizado con exito' })
+                        res.json({ message: 'Fue actualizado con exito' })
 
                     }
 
@@ -101,13 +116,13 @@ module.exports.MonitoriasController = {
                 function (err, results) {
                     if (err) {
                         //Error en el ingreso de datos en la tabla
-                        res.send({ mensaje: err.sqlMessage })
+                        res.json({ mensaje: err.sqlMessage })
                     } {
                         if (results.affectedRows > 0) {
                             console.log("1 Eliminado");
-                            res.send({ mensaje: "Succesful" })
+                            res.json({ mensaje: "Succesful" })
                         } else {
-                            res.send({ mensaje: "No se elimino nada" })
+                            res.json({ mensaje: "No se elimino nada" })
                         }
 
                     }
