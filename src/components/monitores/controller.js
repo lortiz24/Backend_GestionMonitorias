@@ -27,7 +27,24 @@ module.exports.MonitoresController = {
     },
     getById: async (req, res) => {
         try {
-            res.send('Estas obteniendo un monitor')
+            try {
+                const { params: { id } } = req;
+                
+                const conecction = database();
+                conecction.query(
+                    `SELECT * FROM ${COLLECTION} WHERE idMonitores =?`, id,
+                    function (err, results, fields) {
+                        results.length !== 0 ? res.json({
+                            mensaje: "Consulta terminada satisfactoriamente", body: results
+                        }) : res.json({
+                            mensaje: `No se encontraron resultados con id=${id}`, body: results
+                        })
+    
+                    }
+                );
+            } catch (error) {
+                console.log(error)
+            }
 
         } catch (error) {
 
@@ -36,7 +53,7 @@ module.exports.MonitoresController = {
     },
     create: async (req, res) => {
         try {
-            res.send('Estas creando un monitor')
+            
         } catch (error) {
 
         }
