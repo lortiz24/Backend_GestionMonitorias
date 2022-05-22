@@ -8,7 +8,7 @@ module.exports.MonitoresController = {
             conecction.connect(err => {
                 if (err) {
                     throw err
-                }else{
+                } else {
                     console.log('Connected to database')
                 }
             });
@@ -29,17 +29,18 @@ module.exports.MonitoresController = {
         try {
             try {
                 const { params: { id } } = req;
-                
+
                 const conecction = database();
                 conecction.query(
                     `SELECT * FROM ${COLLECTION} WHERE idMonitores =?`, id,
                     function (err, results, fields) {
-                        results.length !== 0 ? res.json({
-                            mensaje: "Consulta terminada satisfactoriamente", body: results
-                        }) : res.json({
-                            mensaje: `No se encontraron resultados con id=${id}`, body: results
+                        if (err) throw err
+                        res.json({
+                            mensaje: "Consulta terminada satisfactoriamente", 
+                            body: results
                         })
-    
+
+
                     }
                 );
             } catch (error) {
@@ -53,7 +54,7 @@ module.exports.MonitoresController = {
     },
     create: async (req, res) => {
         try {
-            
+
         } catch (error) {
 
         }

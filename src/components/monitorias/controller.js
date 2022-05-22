@@ -15,6 +15,7 @@ module.exports.MonitoriasController = {
             conecction.query(
                 `SELECT * FROM ${COLLECTION}`,
                 function (err, results, fields) {
+                    if(err)throw err
                     res.json({
                         mensaje: "Consulta terminada satisfactoriamente", body: results
                     })
@@ -33,6 +34,7 @@ module.exports.MonitoriasController = {
             conecction.query(
                 `SELECT * FROM ${COLLECTION} WHERE idMonitorias =?`, id,
                 function (err, results, fields) {
+                    if (err) throw err
                     results.length !== 0 ? res.json({
                         mensaje: "Consulta terminada satisfactoriamente", body: results
                     }) : res.json({
