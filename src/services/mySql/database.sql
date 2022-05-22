@@ -34,3 +34,18 @@ INSERT INTO monitores  (nombre, apellidos, programAcademica, semestre, cedula, t
 
 INSERT INTO monitorias (id_monitor, materia, fecha, salon)  VALUES (1, 'materia', 'fecha', 'salon');
 
+
+ create table image(
+    id INT NOT NULL  AUTO_INCREMENT,
+    tipo varchar(200),
+    nombre varchar(200),
+    foto LONGBLOB,
+    PRIMARY KEY(id));
+
+    CREATE TABLE monitorias (
+    id INT NOT NULL  AUTO_INCREMENT,
+    tipo VARCHAR(200) NOT NULL,
+    nombre VARCHAR(200) NOT NULL,
+    foto LONGBLOB,
+    PRIMARY KEY(id)
+);

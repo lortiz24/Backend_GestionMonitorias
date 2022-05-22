@@ -1,5 +1,5 @@
 const mysql = require('mysql2');
-const myConnection = require('express-myconnection');
+
 require('dotenv').config();
 
 module.exports = ()=>{
