@@ -2,6 +2,7 @@ const database = require('../../services/mySql/app');
 const COLLECTION = 'monitores'
 const fs = require('fs');
 const path = require('path');
+const {MonitoresUtils}=require('./utils')
 module.exports.MonitoresController = {
     getAll: async (req, res) => {
         try {
@@ -54,7 +55,7 @@ module.exports.MonitoresController = {
         }
 
     },
-    create: async (req, res) => {
+    /* create: async (req, res) => {
         try {
             console.log('first')
 
@@ -85,8 +86,8 @@ module.exports.MonitoresController = {
         } catch (error) {
             console.log(error)
         }
-    },
-    savedImage: async (req, res) => {
+    }, */
+    /* savedImage: async (req, res) => {
         try {
             const conecction = database();
             conecction.connect(err => {
@@ -107,7 +108,40 @@ module.exports.MonitoresController = {
         } catch (error) {
             console.log(error)
         }
+    }, */
+
+
+    create: async (req, res) => {
+        try {
+            console.log('Guardando')
+            const conecction = database();
+            conecction.connect(err => {
+                if (err) {
+                    throw err
+                } else {
+                    console.log('Connected to database')
+                }
+            });
+            if(!MonitoresUtils.bodyNulo(req, res)) return
+            const {params}=req;
+            
+            const response=MonitoresUtils.parseDato(params)
+               //Lectura de la imagen guardada en assets
+            const foto = fs.readFileSync(path.join(__dirname, '../../assets/') + req.file.filename);
+            const body={...response,foto}
+            console.log(body)
+            
+            
+            /conecction.query(`INSERT INTO ${COLLECTION} set ?`, [body], (err, rows) => {
+                if (err) return res.status(500).json({ message: 'Server error', message: err.message });
+                res.json({ message: 'Succesful' })
+            });  
+        } catch (error) {
+            console.log(error)
+        }
     },
+
+
     update: async (req, res) => {
         try {
             const conecction = database();
@@ -121,12 +155,7 @@ module.exports.MonitoresController = {
 
             const { params: { id } } = req;
             const {body} = req
-            for (const property in body) {
-                if (body[property] === null || body[property] === undefined || body[property].length === 0) {
-                    res.json({ mensaje: 'No se puedo actualizar valores nulos' })
-                    return
-                }
-            }
+            MonitoresUtils.bodyNulo(req, res);
             
             conecction.query(`UPDATE ${COLLECTION} set ? WHERE idMonitores = ${id}`, [body], (err, rows) => {
                 if (err) return res.status(500).json({ message: 'Server error'});
