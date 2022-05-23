@@ -68,7 +68,7 @@ module.exports.MonitoresController = {
 
             });
 
-            
+
             const { body } = req
             console.log(body)
             conecction.query(`INSERT INTO ${COLLECTION} set ?`, [body], (err, rows) => {
@@ -92,12 +92,8 @@ module.exports.MonitoresController = {
                 }
             });
 
-            const { params: { id } } = req;
-            const foto_name = req.file.originalname;
-            console.log(path.join(__dirname, '../../assets',req.file.filename));
-            console.log('efefefef')
+            const { params:{id} } = req;
             const foto = fs.readFileSync(path.join(__dirname, '../../assets/')+req.file.filename);
-
             conecction.query(`UPDATE ${COLLECTION} set ? WHERE idMonitores = ${id}`, [{foto}], (err, rows) => {
                 if (err) return res.status(500).json({ message: 'Server error' ,message:err.message});
                 res.json({ message: 'Image saved'})
