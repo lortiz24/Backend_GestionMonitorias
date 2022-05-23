@@ -128,6 +128,7 @@ module.exports.MonitoresController = {
             });
             if(!MonitoresUtils.bodyNulo(req, res)) return
             const {params}=req;
+            console.log(params)
             //Darle espacio a los datos que vienen por params
             const response=MonitoresUtils.parseDato(params)
             //Lectura de la imagen guardada en assets
@@ -175,12 +176,8 @@ module.exports.MonitoresController = {
 
     delete: async (req, res) => {
         try {
-
             const { params: { id } } = req;
-
-
             const conecction = database();
-
             conecction.connect(err => {
                 if (err) {
                     throw err
@@ -193,6 +190,7 @@ module.exports.MonitoresController = {
                 function (err, results) {
                     if (err) {
                         //Error en el ingreso de datos en la tabla
+                        console.log(err)
                         res.json({ mensaje: 'Error interno del servidor' })
                     } else {
                         if (results.affectedRows > 0) {

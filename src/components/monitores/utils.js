@@ -12,13 +12,13 @@ const bodyNulo = (req, res) => {
 
 const parseDato = (params) => {
     return {
-        nombre: params.nombre.replace('$$', ' '),
-        apellidos: params.apellidos.replace('$$', ' '),
-        programAcademica: params.programAcademica.replace('$$', ' '),
-        semestre: params.semestre.replace('$$', ' '),
-        cedula: params.cedula.replace('$$', ' '),
-        telefono: params.telefono.replace('$$', ' '),
-        email: params.email.replace('$$', ' '),
+        nombre: params.nombre.split('$$').join(' '),
+        apellidos: params.apellidos.split('$$').join(' '),
+        programAcademica: params.programAcademica.split('$$').join(' '),
+        semestre: params.semestre.split('$$').join(' '),
+        cedula: params.cedula.split('$$').join(' '),
+        telefono: params.telefono.split('$$').join(' '),
+        email: params.email.split('$$').join(' '),
     }
 
 
