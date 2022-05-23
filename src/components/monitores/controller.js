@@ -67,9 +67,14 @@ module.exports.MonitoresController = {
                 }
 
             });
-
-
             const { body } = req
+            for (const property in body) {
+                if (body[property] === null || body[property] === undefined || body[property].length === 0) {
+                    res.json({ mensaje: 'No se puedo actualizar valores nulos' })
+                    return
+                }
+            }
+            
             console.log(body)
             conecction.query(`INSERT INTO ${COLLECTION} set ?`, [body], (err, rows) => {
                 if (err) return res.status(500).json({ message: 'Server error' });
@@ -92,27 +97,79 @@ module.exports.MonitoresController = {
                 }
             });
 
-            const { params:{id} } = req;
-            const foto = fs.readFileSync(path.join(__dirname, '../../assets/')+req.file.filename);
-            conecction.query(`UPDATE ${COLLECTION} set ? WHERE idMonitores = ${id}`, [{foto}], (err, rows) => {
-                if (err) return res.status(500).json({ message: 'Server error' ,message:err.message});
-                res.json({ message: 'Image saved'})
-            }); 
+            const { params: { id } } = req;
+            //Lectura de la imagen guardada en assets
+            const foto = fs.readFileSync(path.join(__dirname, '../../assets/') + req.file.filename);
+            conecction.query(`UPDATE ${COLLECTION} set ? WHERE idMonitores = ${id}`, [{ foto: foto }], (err, rows) => {
+                if (err) return res.status(500).json({ message: 'Server error', message: err.message });
+                res.json({ message: 'Image saved' })
+            });
         } catch (error) {
             console.log(error)
         }
     },
     update: async (req, res) => {
         try {
-            res.send('Estas actualizando un monitor')
-        } catch (error) {
+            const conecction = database();
+            conecction.connect(err => {
+                if (err) {
+                    throw err
+                } else {
+                    console.log('Connected to database')
+                }
+            });
 
+            const { params: { id } } = req;
+            const {body} = req
+            for (const property in body) {
+                if (body[property] === null || body[property] === undefined || body[property].length === 0) {
+                    res.json({ mensaje: 'No se puedo actualizar valores nulos' })
+                    return
+                }
+            }
+            
+            conecction.query(`UPDATE ${COLLECTION} set ? WHERE idMonitores = ${id}`, [body], (err, rows) => {
+                if (err) return res.status(500).json({ message: 'Server error'});
+                res.json({ message: 'Actualizacion exitosa' })
+            });
+        } catch (error) {
+            console.log(error)
         }
     },
 
     delete: async (req, res) => {
         try {
-            res.send('Estas borrando un monitor')
+
+            const { params: { id } } = req;
+
+
+            const conecction = database();
+
+            conecction.connect(err => {
+                if (err) {
+                    throw err
+                } else {
+                    console.log('Connected to database')
+                }
+            });
+            let query = `DELETE FROM ${COLLECTION} WHERE idMonitores = ${id}`;
+            conecction.query(query,
+                function (err, results) {
+                    if (err) {
+                        //Error en el ingreso de datos en la tabla
+                        res.json({ mensaje: 'Error interno del servidor' })
+                    } else {
+                        if (results.affectedRows > 0) {
+
+                            res.json({ mensaje: "Succesful" })
+                        } else {
+                            res.json({ mensaje: "No se elimino nada" })
+                        }
+
+                    }
+
+                }
+            );
         } catch (error) {
 
         }

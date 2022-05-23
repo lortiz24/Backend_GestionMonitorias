@@ -81,6 +81,7 @@ module.exports.MonitoriasController = {
             for (const property in body) {
                 if (body[property] === null || body[property] === undefined || body[property].length === 0) {
                     res.json({ mensaje: 'No se puedo actualizar valores nulos' })
+                    return
                 }
             }
             let send = [
