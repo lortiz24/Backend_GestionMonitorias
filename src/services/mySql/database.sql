@@ -17,6 +17,8 @@ CREATE TABLE monitores (
     cedula VARCHAR(50) NOT NULL,
     telefono VARCHAR(50) NOT NULL,
     email VARCHAR(255) NOT NULL,
+    foto LONGBLOB ,
+    foto_name VARCHAR(200) ,
     PRIMARY KEY(idMonitores)
 );
 
@@ -30,7 +32,7 @@ CREATE TABLE monitorias (
     FOREIGN KEY(id_monitor) REFERENCES monitores(idMonitores)
 );
 
-INSERT INTO monitores  (nombre, apellidos, programAcademica, semestre, cedula, telefono, email)  VALUES ('nombre', 'apellidos', 'programAcademica', 7, 'cedula', 'telefono', 'email');
+INSERT INTO monitores  (nombre, apellidos, programAcademica, semestre, cedula, telefono, email)  VALUES ('Luis', 'Ortiz', 'Inge sistemas', 7, '123456789', '31137484546', 'ortizfrancoluisjavier@gmail.com');
 
 INSERT INTO monitorias (id_monitor, materia, fecha, salon)  VALUES (1, 'materia', 'fecha', 'salon');
 
@@ -42,10 +44,4 @@ INSERT INTO monitorias (id_monitor, materia, fecha, salon)  VALUES (1, 'materia'
     foto LONGBLOB,
     PRIMARY KEY(id));
 
-    CREATE TABLE monitorias (
-    id INT NOT NULL  AUTO_INCREMENT,
-    tipo VARCHAR(200) NOT NULL,
-    nombre VARCHAR(200) NOT NULL,
-    foto LONGBLOB,
-    PRIMARY KEY(id)
-);
+
