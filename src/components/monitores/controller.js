@@ -87,7 +87,8 @@ module.exports.MonitoresController = {
             console.log(error)
         }
     }, */
-    /* savedImage: async (req, res) => {
+
+    updateFoto: async (req, res) => {
         try {
             const conecction = database();
             conecction.connect(err => {
@@ -97,19 +98,20 @@ module.exports.MonitoresController = {
                     console.log('Connected to database')
                 }
             });
-
+            
             const { params: { id } } = req;
             //Lectura de la imagen guardada en assets
             const foto = fs.readFileSync(path.join(__dirname, '../../assets/') + req.file.filename);
             conecction.query(`UPDATE ${COLLECTION} set ? WHERE idMonitores = ${id}`, [{ foto: foto }], (err, rows) => {
-                if (err) return res.status(500).json({ message: 'Server error', message: err.message });
+                if (err) return res.status(500).json({ message: 'Server error' });
+                if (rows.affectedRows===0) return res.json({ message: 'No se pudo actualizar la foto' });
                 res.json({ message: 'Image saved' })
             });
         } catch (error) {
+            res.json({message: 'Internal server error: '})
             console.log(error)
         }
-    }, */
-
+    }, 
 
     create: async (req, res) => {
         try {
@@ -141,7 +143,6 @@ module.exports.MonitoresController = {
         }
     },
 
-
     update: async (req, res) => {
         try {
             const conecction = database();
@@ -153,13 +154,18 @@ module.exports.MonitoresController = {
                 }
             });
 
+            //verificar si el cuerpo tiene valores nulos
+            if(!MonitoresUtils.bodyNulo(req, res))return
+
             const { params: { id } } = req;
             const {body} = req
-            MonitoresUtils.bodyNulo(req, res);
             
             conecction.query(`UPDATE ${COLLECTION} set ? WHERE idMonitores = ${id}`, [body], (err, rows) => {
                 if (err) return res.status(500).json({ message: 'Server error'});
+                if (rows.affectedRows===0) return res.json({ message: 'No se actualizo nada'});
+                
                 res.json({ message: 'Actualizacion exitosa' })
+                
             });
         } catch (error) {
             console.log(error)

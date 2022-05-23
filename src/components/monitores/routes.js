@@ -19,8 +19,9 @@ const fileUpload = multer({
 
 router.get('/',MonitoresController.getAll);
 router.get('/:id',MonitoresController.getById);
-//router.put('/:id/images',fileUpload,MonitoresController.savedImage);
+router.put('/:id/image',fileUpload,MonitoresController.updateFoto);
 router.post('/:nombre/:apellidos/:programAcademica/:semestre/:cedula/:telefono/:email',fileUpload,MonitoresController.create);
+
 //router.post('/',MonitoresController.create);
 router.delete('/:id',MonitoresController.delete);
 router.put('/:id',MonitoresController.update);
