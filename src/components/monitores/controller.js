@@ -18,6 +18,7 @@ module.exports.MonitoresController = {
             conecction.query(
                 `SELECT * FROM ${COLLECTION}`,
                 function (err, results, fields) {
+                    if (err) return res.status(500).json({ message: 'Server error'});
                     res.json({
                         mensaje: "Consulta terminada satisfactoriamente", body: results
                     })
@@ -37,7 +38,7 @@ module.exports.MonitoresController = {
                 conecction.query(
                     `SELECT * FROM ${COLLECTION} WHERE idMonitores =?`, id,
                     function (err, results, fields) {
-                        if (err) throw err
+                        if (err) return res.status(500).json({ message: 'Server error'});
                         res.json({
                             mensaje: "Consulta terminada satisfactoriamente",
                             body: results
@@ -99,10 +100,11 @@ module.exports.MonitoresController = {
                 }
             });
             
-            const { params: { id } } = req;
+            
             //Lectura de la imagen guardada en assets
             const foto = fs.readFileSync(path.join(__dirname, '../../assets/') + req.file.filename);
-            conecction.query(`UPDATE ${COLLECTION} set ? WHERE idMonitores = ${id}`, [{ foto: foto }], (err, rows) => {
+            //insercion en database
+            conecction.query(`UPDATE ${COLLECTION} set ? WHERE idMonitores = ${req.params.id}`, [{ foto: foto }], (err, rows) => {
                 if (err) return res.status(500).json({ message: 'Server error' });
                 if (rows.affectedRows===0) return res.json({ message: 'No se pudo actualizar la foto' });
                 res.json({ message: 'Image saved' })
@@ -126,15 +128,14 @@ module.exports.MonitoresController = {
             });
             if(!MonitoresUtils.bodyNulo(req, res)) return
             const {params}=req;
-            
+            //Darle espacio a los datos que vienen por params
             const response=MonitoresUtils.parseDato(params)
-               //Lectura de la imagen guardada en assets
+            //Lectura de la imagen guardada en assets
             const foto = fs.readFileSync(path.join(__dirname, '../../assets/') + req.file.filename);
+            //Agregar la foto al body
             const body={...response,foto}
-            console.log(body)
-            
-            
-            /conecction.query(`INSERT INTO ${COLLECTION} set ?`, [body], (err, rows) => {
+            //Insertar en database 
+            conecction.query(`INSERT INTO ${COLLECTION} set ?`, [body], (err, rows) => {
                 if (err) return res.status(500).json({ message: 'Server error', message: err.message });
                 res.json({ message: 'Succesful' })
             });  
